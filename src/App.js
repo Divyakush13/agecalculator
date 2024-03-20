@@ -1,23 +1,40 @@
-import logo from './logo.svg';
+import React, { useState } from 'react';
 import './App.css';
 
 function App() {
+  const [day, setDay] = useState('');
+  const [month, setMonth] = useState('');
+  const [year, setYear] = useState('');
+  const [age, setAge] = useState('');
+
+  const calculateAge = () => {
+    const today = new Date();
+    const birthDate = new Date(year, month - 1, day);
+    let age = today.getFullYear() - birthDate.getFullYear();
+    const monthDiff = today.getMonth() - birthDate.getMonth();
+    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+      age--;
+    }
+    setAge(age);
+  };
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <h1>Age Calculator</h1>
+      <div className="input-container">
+        <label>Day:</label>
+        <input type="number" value={day} onChange={(e) => setDay(e.target.value)} />
+      </div>
+      <div className="input-container">
+        <label>Month:</label>
+        <input type="number" value={month} onChange={(e) => setMonth(e.target.value)} />
+      </div>
+      <div className="input-container">
+        <label>Year:</label>
+        <input type="number" value={year} onChange={(e) => setYear(e.target.value)} />
+      </div>
+      <button className="calculate-btn" onClick={calculateAge}>Calculate Age</button>
+      {age !== '' && <p className="age-result">Your age is: {age}</p>}
     </div>
   );
 }
